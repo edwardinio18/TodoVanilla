@@ -18,7 +18,7 @@ window.onload = function () {
 
 function fetchTodoItems() {
     todos = JSON.parse(localStorage.getItem("todos")) || [];
-    todos = todos.map(t => new Todo(t._description));
+    todos = todos.map(t => new Todo(t.description));
 
     const todoList = document.getElementById("todo_list");
     todoList.replaceWith(createTodoList(todos));
