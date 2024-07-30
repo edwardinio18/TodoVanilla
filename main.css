@@ -4,7 +4,7 @@
     padding: 0;
 }
 
-html, body {
+html {
     height: 100%;
 }
 
@@ -61,6 +61,7 @@ html, body {
     color: white;
     cursor: pointer;
     transition: 0.2s ease-in;
+    font-size: 1rem;
 }
 
 .form_submit_button:hover {
@@ -99,4 +100,31 @@ html, body {
 
 #todo_list li:last-child {
     border-bottom: none;
+}
+
+.list_item_button {
+    background-color: pink;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+    float: right;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+.list_item_button:hover {
+    background-color: #ff6666;
+    transition: 0.2s ease-out;
+}
+
+.list_item_buttons_container {
+    display: grid;
+}
+
+.list_item_content {
+    word-break: break-word;
+    white-space: normal;
 }

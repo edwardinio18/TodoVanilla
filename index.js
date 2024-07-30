@@ -1,74 +1,91 @@
-class Todo {
-    constructor(description) {
-        this._description = description;
-    }
-
-    get description() {
-        return this._description;
-    }
-}
-
-let addForm = document.getElementById("add_form");
-
-let todos;
+import {Button} from './components/generic/Button/Button.js';
+import {Text} from './components/generic/Text/Text.js';
+import {Container} from './components/generic/Container/Container.js';
+import {Form} from './components/generic/Form/Form.js';
+import {FormField} from './components/generic/FormField/FormField.js';
+import {TodoItem} from './components/generic/TodoItem/TodoItem.js';
+import {TodoRepository} from './repositories/TodoRepository.js';
+import {render} from './utils/render.js';
 
 window.onload = function () {
-    fetchTodoItems();
-}
+    const body = document.getElementsByTagName('body')[0];
 
-function fetchTodoItems() {
-    todos = JSON.parse(localStorage.getItem("todos")) || [];
-    todos = todos.map(t => new Todo(t.description));
+    const todoRepository = new TodoRepository();
 
-    const todoList = document.getElementById("todo_list");
-    todoList.replaceWith(createTodoList(todos));
-}
+    const handleAdd = (todo) => {
+        todoRepository.add(todo);
+        renderApp();
+    };
 
-/**
- * @param {Array<Todo>} todos
- */
-function createTodoList(todos) {
-    const todoListElement = document.createElement("ul");
-    todoListElement.id = "todo_list";
+    const handleRemove = (id) => {
+        todoRepository.remove(id);
+        renderApp();
+    };
 
-    todos.forEach((todo, index) => {
-        const todoElement = document.createElement("li");
-        todoElement.textContent = `${index + 1}. ${todo.description}`;
-        todoListElement.appendChild(todoElement);
-    });
-
-    if (todos.length === 0) {
-        const emptyElement = document.createElement("li");
-        emptyElement.textContent = "No todos found";
-        todoListElement.appendChild(emptyElement);
+    const handleEdit = (id, description) => {
+        todoRepository.edit(id, description);
+        renderApp();
     }
 
-    return todoListElement;
-}
+    const renderApp = () => {
+        const appContainer = new Container({
+            id: 'app',
+            children: [
+                new Text({
+                    id: 'title',
+                    type: 'h1',
+                    content: '~ Todo List ~'
+                }),
+                new Container({
+                    id: 'add_form_container',
+                    children: [
+                        new Form({
+                            id: 'add_form',
+                            onSubmit: handleAdd,
+                            children: [
+                                new Container({
+                                    id: 'form_field_container',
+                                    className: 'form_field_container',
+                                    children: [
+                                        new Text({
+                                            type: 'label',
+                                            for_input: 'add_input',
+                                            content: 'Task',
+                                            className: 'input_label',
+                                        }),
+                                        new FormField({
+                                            id: 'add_input',
+                                            name: 'description',
+                                            className: 'form_field',
+                                        })
+                                    ],
+                                }),
+                                new Button({
+                                    type: 'submit',
+                                    name: 'add_todo_button',
+                                    id: 'add_todo_button',
+                                    label: 'Add todo',
+                                    className: 'form_submit_button',
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                new Container({
+                    id: 'todo_list',
+                    children: todoRepository.getAll().map(todo => new TodoItem({
+                        todo,
+                        onRemove: handleRemove,
+                        onEdit: handleEdit,
+                    })),
+                    hidden: todoRepository.getAll().length === 0,
+                })
+            ],
+        });
 
-/**
- * @param {Todo} todo
- */
-function appendTodoItem(todo) {
-    todos.push(todo);
-    localStorage.setItem("todos", JSON.stringify(todos));
+        body.innerHTML = '';
+        render(appContainer, body);
+    };
 
-    const todoList = document.getElementById("todo_list");
-    todoList.replaceWith(createTodoList(todos));
-}
-
-addForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const input = document.getElementById("add_input");
-
-    if (input.value === "" || input.value === null || input.value.trim() === "") {
-        alert("Please enter a description");
-        return;
-    }
-
-    const todo = new Todo(input.value);
-
-    appendTodoItem(todo);
-    input.value = "";
-});
+    renderApp();
+};
