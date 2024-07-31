@@ -1,26 +1,26 @@
-import {Component} from '../Component/Component.js';
+import { Component } from "../Component/Component.js";
 
 class Button extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+  }
+
+  handleClick = () => {
+    if (this.props.onclick) {
+      this.props.onclick();
     }
+  };
 
-    handleClick = () => {
-        if (this.props.onclick) {
-            this.props.onclick();
-        }
-    }
+  render() {
+    const button = document.createElement("button");
 
-    render() {
-        const button = document.createElement('button');
+    button.id = this.props.id;
+    button.textContent = this.props.label;
+    button.addEventListener("click", this.handleClick);
+    button.className = this.props.className || "";
 
-        button.id = this.props.id;
-        button.textContent = this.props.label;
-        button.addEventListener('click', this.handleClick);
-        button.className = this.props.className || '';
-
-        return button;
-    }
+    return button;
+  }
 }
 
-export {Button};
+export { Button };
