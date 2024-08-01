@@ -4,12 +4,22 @@
     <title>- Todo -</title>
     <link
       rel="stylesheet"
-      href="main.css"
+      href="./main.css"
     >
     <script
       type="module"
-      src="./index.js"
+      src="./web_components/index.js"
     ></script>
   </head>
-  <body></body>
+  <body>
+    <main-component>
+      <container-component>
+        <text-component
+          type="h1"
+          id="title"
+        >Hello, World!
+        </text-component>
+      </container-component>
+    </main-component>
+  </body>
 </html>

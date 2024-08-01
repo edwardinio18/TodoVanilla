@@ -1,29 +1,27 @@
-class Component {
-  constructor(props = {}) {
-    this.props = props;
-    this.state = {};
-    this.element = null;
+class Component extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({mode: "open"});
   }
 
-  setState(newState) {
-    this.state = {
-      ...this.state, ...newState,
-    };
-
-    this._render();
+  addStyles() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/components/generic/Component/Component.css";
+    this.shadowRoot.appendChild(link);
   }
 
-  _render() {
-    const newElement = this.render();
-    if (this.element && this.element.parentNode) {
-      this.element.parentNode.replaceChild(newElement, this.element);
+  connectedCallback() {
+    this.addStyles();
+    const renderedElement = this.render();
+    if (renderedElement) {
+      this.shadowRoot.appendChild(renderedElement);
     }
-    this.element = newElement;
   }
 
   render() {
-    throw new Error("Component subclasses must implement render()");
+    // To be implemented by subclasses
   }
 }
 
-export { Component };
+export default Component;

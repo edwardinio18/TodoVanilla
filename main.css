@@ -8,12 +8,6 @@ html {
   height: 100%;
 }
 
-#title {
-  text-align: center;
-  margin-top: 20px;
-  font-style: italic;
-}
-
 #add_form {
   width: 100%;
   max-width: 300px;
@@ -67,11 +61,6 @@ html {
 .form_submit_button:hover {
   background-color: #FF6666;
   transition: 0.2s ease-out;
-}
-
-#add_form_container {
-  display: flex;
-  justify-content: center;
 }
 
 #todo_list {
