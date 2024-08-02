@@ -1,20 +1,26 @@
 import Component from "../Component/Component.js";
-import { render } from "../../../utils/render.js";
 
 class Container extends Component {
   constructor() {
     super();
-  }
 
-  addStyles() {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/components/generic/Container/Container.css";
-    this.shadowRoot.appendChild(link);
+    if (!this.shadowRoot) {
+      this.attachShadow({
+        mode: "open",
+      });
+    }
   }
 
   connectedCallback() {
-    this.addStyles();
+    this.updateContent();
+  }
+
+  attributeChangedCallback() {
+    this.updateContent();
+  }
+
+  updateContent() {
+    this.shadowRoot.innerHTML = "";
     const renderedElement = this.render();
     if (renderedElement) {
       this.shadowRoot.appendChild(renderedElement);
@@ -22,30 +28,17 @@ class Container extends Component {
   }
 
   render() {
-    const container = document.createElement("div");
-    const id = this.getAttribute("id");
-    if (id) {
-      container.id = id;
-    }
+    const type = this.getAttribute("type") || "div";
+    const container = document.createElement(type);
 
-    const className = this.getAttribute("class");
-    if (className) {
-      container.className = className;
-    }
+    Array.from(this.childNodes).forEach(child => {
+      container.appendChild(child.cloneNode(true));
+    });
 
-    const children = Array.from(this.children);
-    for (const child of children) {
-      if (child instanceof Component) {
-        render(child, container);
-      } else {
-        container.appendChild(child);
-      }
-    }
+    this.innerHTML = "";
 
     return container;
   }
 }
-
-customElements.define("container-component", Container);
 
 export default Container;

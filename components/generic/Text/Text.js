@@ -3,6 +3,25 @@ import Component from "../Component/Component.js";
 class Text extends Component {
   constructor() {
     super();
+
+    if (!this.shadowRoot) {
+      this.attachShadow({
+        mode: "open",
+      });
+    }
+  }
+
+  static get observedAttributes() {
+    return [
+      "type",
+      "id",
+      "class",
+      "content",
+    ];
+  }
+
+  attributeChangedCallback() {
+    this.updateContent();
   }
 
   addStyles() {
@@ -13,7 +32,13 @@ class Text extends Component {
   }
 
   connectedCallback() {
+    this.shadowRoot.innerHTML = "";
+
     this.addStyles();
+    this.updateContent();
+  }
+
+  updateContent() {
     const renderedElement = this.render();
     if (renderedElement) {
       this.shadowRoot.appendChild(renderedElement);
@@ -22,29 +47,21 @@ class Text extends Component {
 
   render() {
     const type = this.getAttribute("type") || "p";
-    const htmlFor = this.getAttribute("htmlFor");
+    const textElement = document.createElement(type);
+    textElement.textContent = this.getAttribute("content") || "";
 
-    const text = document.createElement(type);
     const id = this.getAttribute("id");
     if (id) {
-      text.id = id;
+      textElement.id = id;
     }
 
     const className = this.getAttribute("class");
     if (className) {
-      text.className = className;
+      textElement.className = className;
     }
 
-    text.textContent = this.textContent;
-
-    if (type === "label" && htmlFor) {
-      text.htmlFor = htmlFor;
-    }
-
-    return text;
+    return textElement;
   }
 }
-
-customElements.define("text-component", Text);
 
 export default Text;
