@@ -3,3 +3,9 @@
   margin-top: 20px;
   font-style: italic;
 }
+
+.input_label {
+  padding: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}

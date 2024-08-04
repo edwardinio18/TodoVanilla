@@ -1,34 +1,17 @@
-import Form from "./components/generic/Form/Form.js";
-import Container from "./components/generic/Container/Container.js";
-import Text from "./components/generic/Text/Text.js";
+import "./components/generic/Button/Button.js";
+import "./components/generic/Container/Container.js";
+import "./components/generic/FormField/FormField.js";
+import "./components/generic/TodoItem/TodoItem.js";
+import "./components/generic/TodoList/TodoList.js";
+import "./components/generic/TodoContainer/TodoContainer.js";
+import "./components/generic/Text/Text.js";
 
-window.onload = function () {
-  const renderApp = () => {
-    const body = document.body;
-
-    const appContainer = document.getElementById("app");
-
-    const title = document.createElement("text-component");
-    title.setAttribute("content", "~ Todo List ~");
-    title.setAttribute("type", "h1");
-    title.setAttribute("id", "title");
-
-    appContainer.appendChild(title);
-
-    const addFormContainer = document.createElement("container-component");
-    addFormContainer.setAttribute("id", "add_form_container");
-
-    const addForm = document.createElement("form-component");
-    addForm.setAttribute("id", "add_form");
-    addForm.setAttribute("onsubmit", "handleAdd");
-
-    addFormContainer.appendChild(addForm);
-
-    appContainer.appendChild(addFormContainer);
-
-    body.innerHTML = "";
-    body.appendChild(appContainer);
-  };
-
-  renderApp();
-};
+document.getElementById("add-todo").addEventListener("click", () => {
+  const formField = document.getElementById("new-todo");
+  if (formField.validate()) {
+    const description = formField.value;
+    const todoList = document.getElementById("todo-list");
+    todoList.addTodo(description);
+    formField.value = "";
+  }
+});

@@ -11,34 +11,14 @@ class Container extends Component {
     }
   }
 
-  connectedCallback() {
-    this.updateContent();
-  }
-
-  attributeChangedCallback() {
-    this.updateContent();
-  }
-
-  updateContent() {
-    this.shadowRoot.innerHTML = "";
-    const renderedElement = this.render();
-    if (renderedElement) {
-      this.shadowRoot.appendChild(renderedElement);
-    }
-  }
-
   render() {
-    const type = this.getAttribute("type") || "div";
-    const container = document.createElement(type);
-
-    Array.from(this.childNodes).forEach(child => {
-      container.appendChild(child.cloneNode(true));
-    });
-
-    this.innerHTML = "";
-
-    return container;
+    this.shadowRoot.innerHTML = `
+      <link rel="stylesheet" href="/components/generic/Container/Container.css">
+      <div class="container">
+        <slot></slot>
+      </div>
+    `;
   }
 }
 
-export default Container;
+customElements.define("container-component", Container);

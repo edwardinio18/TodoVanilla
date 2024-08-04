@@ -1,7 +1,7 @@
-class Component extends HTMLElement {
+export default class Component extends HTMLElement {
   constructor() {
     super();
-    
+
     if (!this.shadowRoot) {
       this.attachShadow({
         mode: "open",
@@ -9,24 +9,11 @@ class Component extends HTMLElement {
     }
   }
 
-  addStyles() {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/components/generic/Component/Component.css";
-    this.shadowRoot.appendChild(link);
-  }
-
   connectedCallback() {
-    this.addStyles();
-    const renderedElement = this.render();
-    if (renderedElement) {
-      this.shadowRoot.appendChild(renderedElement);
-    }
+    this.render();
   }
 
   render() {
-    // To be implemented by subclasses
+    throw new Error("Render method should be implemented in the derived class");
   }
 }
-
-export default Component;

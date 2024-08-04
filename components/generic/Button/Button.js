@@ -1,26 +1,22 @@
-import { Component } from "../Component/Component.js";
+import Component from "../Component/Component.js";
 
 class Button extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
+    if (!this.shadowRoot) {
+      this.attachShadow({
+        mode: "open",
+      });
+    }
   }
 
-  handleClick = () => {
-    if (this.props.onclick) {
-      this.props.onclick();
-    }
-  };
-
   render() {
-    const button = document.createElement("button");
-
-    button.id = this.props.id;
-    button.textContent = this.props.label;
-    button.addEventListener("click", this.handleClick);
-    button.className = this.props.className || "";
-
-    return button;
+    this.shadowRoot.innerHTML = `
+      <link rel="stylesheet" href="/components/generic/Button/Button.css">
+      <button><slot></slot></button>
+    `;
   }
 }
 
-export { Button };
+customElements.define("button-component", Button);
